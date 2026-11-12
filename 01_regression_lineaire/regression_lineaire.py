@@ -64,6 +64,16 @@ eur = lambda X_, y_: np.mean(np.abs(predire(X_) - y_)) * y_sigma
 print(f"\nErreur absolue moyenne  train={eur(Xtr, ytr):,.0f} €  "
       f"val={eur(Xva, yva):,.0f} €  test={eur(Xte, yte):,.0f} €")
 
+# RMSE (en €, pénalise davantage les grosses erreurs) et R² (part de la variance
+# du prix expliquée par le modèle : 1 = parfait, 0 = pas mieux que prédire la moyenne).
+# Le R² est invariant par normalisation, on peut le calculer sur les valeurs normalisées.
+# MSE en unités d'origine (€²) : la loss d'entraînement remise à l'échelle des prix.
+mse = lambda X_, y_: perte(X_, y_) * y_sigma ** 2
+rmse = lambda X_, y_: np.sqrt(mse(X_, y_))
+r2 = lambda X_, y_: 1 - np.sum((y_ - predire(X_)) ** 2) / np.sum((y_ - y_.mean()) ** 2)
+for nom, X_, y_ in [("train", Xtr, ytr), ("val", Xva, yva), ("test", Xte, yte)]:
+    print(f"{nom:5s}  MSE={mse(X_, y_):,.0f} €²   RMSE={rmse(X_, y_):9,.0f} €   R²={r2(X_, y_):.3f}")
+
 # Retour aux unités d'origine pour lire les coefficients.
 w_reel = w * y_sigma / sigma
 b_reel = y_mu + b * y_sigma - w_reel @ mu
