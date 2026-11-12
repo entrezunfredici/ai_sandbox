@@ -105,7 +105,7 @@ if "--plot" in sys.argv:
     pos = np.arange(len(FEATURES))
     ax[2].bar(pos - 0.2, vrais, 0.4, label="vrais")
     ax[2].bar(pos + 0.2, w_reel, 0.4, label="appris")
-    ax[2].set_xticks(pos, [f.replace("_", "") for f in FEATURES])
+    ax[2].set_xticks(pos, ["superficie\n(m²)", "pièces", "distance\ncentre (km)", "ancienneté\n(ans)"])
     ax[2].set(title="Coefficients (€ par unité)")
     ax[2].legend()
 
